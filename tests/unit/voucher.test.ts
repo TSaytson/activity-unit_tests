@@ -65,4 +65,12 @@ describe(`Apply vouchers unit tests suite`, () => {
       applied: true
     })
   })
+  it(`Should respond that voucher does not exists`, () => {
+    const voucher = voucherFactory.generateVoucher();
+    jest.spyOn(voucherRepository, 'getVoucherByCode').mockImplementationOnce((): any => {
+      return undefined;
+    });
+    const promise = voucherService.applyVoucher(voucher.code, voucher.discount);
+    expect(promise).rejects.toEqual(conflictError("Voucher does not exist."));
+  })
 })
